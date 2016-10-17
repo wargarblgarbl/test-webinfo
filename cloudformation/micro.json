@@ -1,0 +1,81 @@
+{
+    "Resources" : {
+	"WebServerInstance" : {
+	    "Type" : "AWS::EC2::Instance",
+	    "Metadata" : {
+		"AWS::CloudFormation::Init" : {
+		    "configSets" : {
+			"Install" : [ "Install" ]
+		    },
+		    "Install" : {
+			"packages" : {
+			    "yum" : {
+				"nginx"        : []
+			    }
+			},
+			"files" : {
+			    "/var/www/index.html" : {
+				"source": "https://raw.githubusercontent.com/wargarblgarbl/test-webinfo/master/deployable/index.html"
+			    },
+			    "/etc/nginx/nginx.conf" : {
+				"source": "https://raw.githubusercontent.com/wargarblgarbl/test-webinfo/master/configs/nginx.conf",
+				"mode"  : "000600",
+				"owner" : "root",
+				"group" : "root"
+				
+			    },
+			    "/etc/nginx/conf.d/default.conf" : {
+				"source" : "https://raw.githubusercontent.com/wargarblgarbl/test-webinfo/master/configs/default.conf",
+				"mode"  : "000600",
+				"owner" : "root",
+				"group" : "root"
+			    }
+			},
+		    	"services" : {
+			    "sysvinit": {
+				"nginx" : {
+				    "enabled" : "true",
+				    "ensureRunning": "true"
+ 				}
+			    }
+			}
+		    }
+		}
+	    },
+	    "Properties" : {
+		"KeyName" : "MicroKey",
+		"ImageId" : "ami-b04e92d0",
+		"InstanceType" : "t2.micro",
+		"Tags" : [ {"Key" : "Name",
+			    "Value" : "WebServer"},
+			   {"Key" : "Type",
+			    "Value": "nginx-server"}
+			 ],
+		"UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+		    "#!/bin/bash -xe\n",
+		    "yum update -y aws-cfn-bootstrap\n",
+		    
+		    "# Install the files and packages from the metadata\n",
+		    "/opt/aws/bin/cfn-init -v ",
+		    "         --stack ", { "Ref" : "AWS::StackName" },
+		    "         --resource WebServerInstance ",
+		    "         --configsets Install ",
+		    "         --region ", { "Ref" : "AWS::Region" }, "\n"
+		]]}},
+		"SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ]
+	    }
+	},
+	
+	"WebServerSecurityGroup" : {
+	    "Type" : "AWS::EC2::SecurityGroup",
+	    "Properties" : {
+		"GroupDescription" : "Enable HTTP access via port 80",
+		"SecurityGroupIngress" : [
+		    {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
+		    {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"}
+		]
+	    }
+	}
+    } 
+}
+

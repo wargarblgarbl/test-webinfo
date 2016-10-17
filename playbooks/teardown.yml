@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    aws_region: "us-west-2"
+    stack_name: "micro"
+
+  tasks:
+    - name: teardown the key
+      ec2_key:
+        name: Micro_Key
+        state: absent
+        region: "{{ aws_region }}"
+
+    - name: teardown CloudFormation stack
+      cloudformation:
+        stack_name: "{{ stack_name }}"
+        state: "absent"
+        region: "{{ aws_region }}"
+      

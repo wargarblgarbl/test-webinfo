@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    aws_region: us-west-2
+    stack_name: "micro"
+
+  tasks:
+    - name: create ec2 keypair
+      ec2_key:
+        name: MicroKey
+        region: "{{ aws_region }}"
+        key_material: "{{ item }}"
+      with_file: ../keys/micro.pub
+      
+    - name: create CloudFormation stack
+      cloudformation:
+        stack_name: "{{ stack_name }}"
+        state: "present"
+        region: "{{ aws_region }}"
+        template: "../cloudformation/{{ stack_name }}.json"
+        tags:
+          "Stack": "web_nginx"
+
