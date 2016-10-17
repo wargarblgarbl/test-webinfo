@@ -9,9 +9,13 @@
 
 ###Instructions
 - To spin up and run automated tests on the stack
+
 -- Clone repository
+
 -- execute `./createstack.sh`
 - To run automated tests
+
 -- execute `./teststack.sh`
 - To tear down the stack
+
 -- execute `./deletestack.sh`
