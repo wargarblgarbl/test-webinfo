@@ -11,3 +11,6 @@ echo "" | ssh-keygen -t rsa -f ./keys/micro
 #Run the playbook
 ansible-playbook ./playbooks/micro.yml
 
+
+#run tests
+env bash ./teststack.sh
