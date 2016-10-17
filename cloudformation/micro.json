@@ -43,7 +43,6 @@
 		}
 	    },
 	    "Properties" : {
-		"KeyName" : "MicroKey",
 		"ImageId" : "ami-b04e92d0",
 		"InstanceType" : "t2.micro",
 		"Tags" : [ {"Key" : "Name",

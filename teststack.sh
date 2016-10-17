@@ -8,12 +8,14 @@ fi
 
 #Use ansible to see if we have hosts up
 echo "Checking if server is up"
-ansible -i ec2.py -m ping tag_Name_WebServer -u ec2-user --private-key ./keys/micro
+ansible -i ec2.py -m ping type_t2_micro -u ec2-user --private-key ./keys/micro
 
 
-#Abuse of the amazon dynamic inventory script to run a command against eveything tagged "application web nginx"
+#Abuse of the amazon dynamic inventory script to run a command against eveything tagged "type_t2_micro"
+#We could theoretically use a completely different variable to filter by, but since we don't have anything else
+#yet, this is as good as anything else
 echo "checking deployable diff"
-for i in `python ec2.py --list | jq '.tag_Name_WebServer[]' | sed s/\"//g`; do
+for i in `python ec2.py --list | jq '.type_t2_micro[]' | sed s/\"//g`; do
 	   curl -s  $i/index.html > /tmp/test_index.html
 	   diff_output=$(diff -bB /tmp/test_index.html deployable/index.html | wc -l)
 	   if (( diff_output > 0 )); then
@@ -23,4 +25,16 @@ for i in `python ec2.py --list | jq '.tag_Name_WebServer[]' | sed s/\"//g`; do
 	   fi
            rm /tmp/test_index.html
 done	
- 
+
+echo "Checking load balancer"
+if [ -f loadbalancer.out ]; then
+    lb=$(cat loadbalancer.out | cut -d "'" -f4)
+    curl -s $lb > /tmp/test_lb.html
+    diff_output=$(diff -bB /tmp/test_lb.html deployable/index.html | wc -l)
+    if (( diff_output > 0 )); then
+	echo "FAIL: loadbalancer [$lb] does not match deployable or is serving nothing"
+    else
+	echo "PASS: loadbalancer [$lb] deployed successfully"
+    fi
+    rm /tmp/test_lb.html
+fi

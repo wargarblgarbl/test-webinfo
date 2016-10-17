@@ -1,0 +1,35 @@
+---
+- hosts: tag_Stack_web_nginx
+  gather_facts: False
+  remote_user: ec2-user
+
+  tasks:
+    - name: Wait for SSH
+      local_action: wait_for port=22 host={% if ansible_ssh_host is defined %}{{ ansible_ssh_host }}{% else %}{{ inventory_hostname }}{% endif %}
+
+    - name: install nginx
+      yum:
+        name: nginx
+        state: latest
+      become: true
+
+    - name: Get nginx default configs
+      copy: src="../configs/default.conf" dest="/etc/nginx/conf.d/default.conf"
+      become: true
+
+    - name: get nginx global configs
+      copy: src="../configs/nginx.conf" dest="/etc/nginx/nginx.conf"
+      become: true
+
+    - name: create /var/www
+      file: path=/var/www state=directory owner=nginx group=nginx mode=0755
+      become: true
+
+    - name: Deploy static site
+      copy: src="../deployable/index.html" dest="/var/www/index.html"
+      become: true
+
+    - name: Reloading nginx
+      service: name=nginx state=restarted enabled=yes
+      become: true
+  

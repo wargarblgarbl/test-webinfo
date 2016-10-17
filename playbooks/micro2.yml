@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    stack_name: "micro2"
+    aws_region: us-west-2
+
+  tasks:
+    - name: create ec2 keypair
+      ec2_key:
+        name: MicroKey
+        region: "{{ aws_region }}"
+        key_material: "{{ item }}"
+      with_file: ../keys/micro.pub
+
+      
+    - name: create CloudFormation stack
+      cloudformation:
+        stack_name: "micro"
+        state: "present"
+        region:  "{{ aws_region }}"
+        template: "./cloudformation/{{ stack_name }}.json"
+        tags:
+          "Stack": "web_nginx"
+      args:
+        template_parameters:
+          InstanceType: t2.micro
+          KeyName: MicroKey
+      register: stack
+    - name: echo stack outputs
+      debug: msg="URL is available at {{ stack.stack_outputs }}"
+    - local_action: shell echo "{{ stack.stack_outputs }}" > loadbalancer.out
