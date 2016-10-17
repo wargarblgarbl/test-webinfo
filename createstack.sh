@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+export ANSIBLE_HOSTS=./ec2.py
+export ANSIBLE_HOST_KEY_CHECKING=false
+export EC2_INI_PATH=./ec2.ini
 
 #Create Keypair for us to use
 #In reality, we probably need a better way of securing this key.
@@ -6,11 +9,16 @@
 #For the purposes of this exercise, I included this stub code to
 #generate a quick RSA key for the ansible playbooks to use.
 
+if [ ! -d keys ]; then
+mkdir keys
+fi
 echo "" | ssh-keygen -t rsa -f ./keys/micro
 
 #Run the playbook
 ansible-playbook ./playbooks/micro.yml
 
+#refresh inventory cash
+./ec2.py --refresh-cache
 
 #run tests
 env bash ./teststack.sh

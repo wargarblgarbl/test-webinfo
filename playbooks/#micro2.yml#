@@ -24,6 +24,7 @@
         tags:
           "Stack": "web_nginx"
           "Name": "web_nginx"
+          
       args:
         template_parameters:
           InstanceType: t2.micro

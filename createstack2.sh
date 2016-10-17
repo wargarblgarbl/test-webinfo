@@ -3,7 +3,9 @@ if [ ! -f ec2.py ]; then
     curl -s https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.py > ec2.py
     chmod +x ec2.py
 fi
-
+if [ ! -d keys ]; then
+mkdir keys
+fi
 #Dynamic Inventory exports
 export ANSIBLE_HOSTS=./ec2.py
 export ANSIBLE_HOST_KEY_CHECKING=false

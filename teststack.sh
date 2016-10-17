@@ -7,7 +7,7 @@ if [ ! -f ec2.py ]; then
 fi
 
 #Use ansible to see if we have hosts up
-echo "Checking if server is up"
+echo "Checking to see if server is accessible by ansible"
 ansible -i ec2.py -m ping type_t2_micro -u ec2-user --private-key ./keys/micro
 
 
@@ -26,13 +26,13 @@ for i in `python ec2.py --list | jq '.type_t2_micro[]' | sed s/\"//g`; do
            rm /tmp/test_index.html
 done	
 
-echo "Checking load balancer"
 if [ -f loadbalancer.out ]; then
+    echo "Testing load balancer"
     lb=$(cat loadbalancer.out | cut -d "'" -f4)
     curl -s $lb > /tmp/test_lb.html
     diff_output=$(diff -bB /tmp/test_lb.html deployable/index.html | wc -l)
     if (( diff_output > 0 )); then
-	echo "FAIL: loadbalancer [$lb] does not match deployable or is serving nothing"
+	echo "FAIL: loadbalancer [$lb] does not match deployable or is serving nothing and is most likely still starting up"
     else
 	echo "PASS: loadbalancer [$lb] deployed successfully"
     fi
