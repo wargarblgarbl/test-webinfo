@@ -5,6 +5,7 @@
 - Ansible - Installation instructions: http://docs.ansible.com/ansible/intro_installation.html
 - awscli - Installation instructions:  http://docs.aws.amazon.com/cli/latest/userguide/installing.html
 - bash - the shell scripting portions of these scripts are written in bash, and possibly contain bashisms.
+- jq - the test script does some json processing right in bash. 
 - dynamic ansible inventory script for aws. If missing, the scripts will automatically grab it, however, the ini file is provided in the repository as-is. 
 
 ###instructions
