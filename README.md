@@ -27,6 +27,7 @@ An ELB that fronts at least two nginx nodes serving static content.
 
 ###room for improvement
 Plenty of room for improvement here. Among the things to possibly consider going forward (in no particular order):
+
 1. Standardize on the ansible best-practices directory layout. Right now things are a little bit more chaotic than they need to be.
 
 2. Break up the nginx-deploy playbook into several minor roles. We may want to re-use them at a later time. The wait for SSH bit specifically comes to mind.
