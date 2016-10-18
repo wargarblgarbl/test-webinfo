@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-export ANSIBLE_HOSTS=./ec2.py
+#Export some global variables
+export ANSIBLE_HOSTS=`pwd`/dyninventory/ec2.py
+export EC2_INI_PATH=`pwd`/dyninventory/ec2.ini
 export ANSIBLE_HOST_KEY_CHECKING=false
-export EC2_INI_PATH=./ec2.ini
 
 #Create Keypair for us to use
 #In reality, we probably need a better way of securing this key.
@@ -10,15 +11,17 @@ export EC2_INI_PATH=./ec2.ini
 #generate a quick RSA key for the ansible playbooks to use.
 
 if [ ! -d keys ]; then
-mkdir keys
+    mkdir keys
 fi
+
+#Generate the key we're going to be using
 echo "" | ssh-keygen -t rsa -f ./keys/micro
 
 #Run the playbook
-ansible-playbook ./playbooks/micro.yml
+ansible-playbook micro.yml
 
 #refresh inventory cash
-./ec2.py --refresh-cache
+$ANSIBLE_HOSTS --refresh-cache
 
 #run tests
 env bash ./teststack.sh

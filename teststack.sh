@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
+export ANSIBLE_HOSTS=`pwd`/dyninventory/ec2.py
+export EC2_INI_PATH=`pwd`/dyninventory/ec2.ini
+export ANSIBLE_HOST_KEY_CHECKING=false
+
 
 echo "Running tests"
-if [ ! -f ec2.py ]; then
-    curl -s https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.py > ec2.py
+if [ ! -f ./dyninventory/ec2.py ]; then
+    curl -s https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.py > ./dyninventory/ec2.py
     chmod +x ec2.py
 fi
 
