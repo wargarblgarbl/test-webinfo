@@ -16,6 +16,8 @@
 - To tear down the stack  
 -- execute `./deletestack.sh`
 
+If you need to ssh into a running instance, the keys are located in `./keys`, this folder is created on demand when `createstack2.sh` is run. 
+
 
 ###createstach2.sh
 This script is the big cahuna, so to speak. It runs a playbook to provision our stack, then runs another playbook to deploy our configuration and deployable artifacts, and then runs some tests.
@@ -57,6 +59,6 @@ The legacy variant of this script is available in /legacy/createstack.sh and the
 While this could have been a "correct" solution, it suffers from a number of issues. It's not every extensible, it's only for one server, and doesn't particularly leverage the capabilities of the provided platform, and it offloads configuration management from the configuration management software to another tool, which isn't great.
 
 ###quirks
-When running ansible from a FreeBSD host, the nginx-deploy playbook will fail for up to 60 seconds after the initial deployment goes through. 
+When running createstack2.sh from a FreeBSD host, the nginx-deploy playbook will fail for up to 60 seconds after the initial deployment goes through. 
 
-TODO: Investigate, potentially needs a bug report filed. 
+TODO: Investigate, potentially needs a bug report filed with the ansible team. 
