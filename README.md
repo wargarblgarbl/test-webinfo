@@ -56,4 +56,7 @@ The legacy variant of this script is available in /legacy/createstack.sh and the
 
 While this could have been a "correct" solution, it suffers from a number of issues. It's not every extensible, it's only for one server, and doesn't particularly leverage the capabilities of the provided platform, and it offloads configuration management from the configuration management software to another tool, which isn't great.
 
+###quirks
+When running ansible from a FreeBSD host, the nginx-deploy playbook will fail for up to 60 seconds after the initial deployment goes through. 
 
+TODO: Investigate, potentially needs a bug report filed. 
