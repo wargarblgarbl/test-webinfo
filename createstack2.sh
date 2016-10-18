@@ -28,7 +28,7 @@ echo "" | ssh-keygen -t rsa -f ./keys/micro
 #Run the playbook
 ansible-playbook micro2.yml
 #Refresh our inventory cache
-./ec2.py --refresh-cache
+./dyninventory/ec2.py --refresh-cache
 #Run the deployment playbook. 
 
 ansible-playbook playbooks/nginx_deploy.yml --private-key ./keys/micro -i ./dyninventory/ec2.py 

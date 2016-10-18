@@ -19,7 +19,7 @@ ansible -i ec2.py -m ping type_t2_micro -u ec2-user --private-key ./keys/micro
 #We could theoretically use a completely different variable to filter by, but since we don't have anything else
 #yet, this is as good as anything else
 echo "checking deployable diff"
-for i in `python ec2.py --list | jq '.type_t2_micro[]' | sed s/\"//g`; do
+for i in `python ./dyninventory/ec2.py --list | jq '.type_t2_micro[]' | sed s/\"//g`; do
 	   curl -s  $i/index.html > /tmp/test_index.html
 	   diff_output=$(diff -bB /tmp/test_index.html deployable/index.html | wc -l)
 	   if (( diff_output > 0 )); then
