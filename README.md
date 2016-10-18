@@ -56,7 +56,9 @@ Plenty of room for improvement here. Among the things to possibly consider going
 ###legacy
 The legacy variant of this script is available in `/legacy/createstack.sh` and the corresponding ansible yaml file. This is the very first attempt at this task, and features an number of not so great decisions, including using the cloudformation tempalte itself to install nginx and dynamically pull the configuration and deployable files from github.
 
-While this could have been a "correct" solution, it suffers from a number of issues. It's not every extensible, it's only for one server, and doesn't particularly leverage the capabilities of the provided platform, and it offloads configuration management from the configuration management software to another tool, which isn't great.
+While this could have been a "correct" solution, it suffers from a number of issues. It's not every extensible, it only provisions one server, and doesn't particularly leverage the capabilities of the provided platform, and it offloads configuration management from the configuration management software to another tool, which isn't great.
+
+On the plus side - it's very readable and fairly concise. It wouldn't be too hard to turn it into something a tad more robust. 
 
 ###quirks
 When running `createstack2.sh` on a FreeBSD host, the `nginx-deploy` playbook will fail for up to 60 seconds after the initial deployment goes through. 
