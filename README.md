@@ -20,7 +20,7 @@
 If you need to ssh into a running instance, the keys are located in `./keys`, this folder is created on demand when `createstack2.sh` is run. 
 
 
-###createstach2.sh
+###createstack2.sh
 This script is the big cahuna, so to speak. It runs a playbook to provision our stack, then runs another playbook to deploy our configuration and deployable artifacts, and then runs some tests.
 
 
