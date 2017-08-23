@@ -1,6 +1,6 @@
 # Ansible/CloudFormation Setup/Testing/Teardown scripts
 
-###dependencies
+### dependencies
 - Python - everything has been tested with python 2.7
 - Ansible - Installation instructions: http://docs.ansible.com/ansible/intro_installation.html
 - awscli - Installation instructions:  http://docs.aws.amazon.com/cli/latest/userguide/installing.html
@@ -8,7 +8,7 @@
 - jq - the test script does some json processing right in bash. 
 - dynamic ansible inventory script for aws. If missing, the scripts will automatically grab it, however, the ini file is provided in the repository as-is. 
 
-###instructions
+### instructions
 - To spin up and run automated tests on the stack  
 -- Clone repository  
 -- execute `./createstack2.sh`  
@@ -20,15 +20,15 @@
 If you need to ssh into a running instance, the keys are located in `./keys`, this folder is created on demand when `createstack2.sh` is run. 
 
 
-###createstack2.sh
+### createstack2.sh
 This script is the big cahuna, so to speak. It runs a playbook to provision our stack, then runs another playbook to deploy our configuration and deployable artifacts, and then runs some tests.
 
 
-###the stack
+### the stack
 An ELB that fronts at least two nginx nodes serving static content. 
 
 
-###room for improvement
+### room for improvement
 Plenty of room for improvement here. Among the things to possibly consider going forward (in no particular order):
 
 1. Standardize on the ansible best-practices directory layout. Right now things are a little bit more chaotic than they need to be.
@@ -54,14 +54,14 @@ Plenty of room for improvement here. Among the things to possibly consider going
 11. Straight on the heels of 10, testing needs to be improved. Doing it as a bash script is fine on a small scale, but I *really* want to offload this to a proper test setup. 
 
 
-###legacy
+### legacy
 The legacy variant of this script is available in `/legacy/createstack.sh` and the corresponding ansible yaml file. This is the very first attempt at this task, and features an number of not so great decisions, including using the cloudformation tempalte itself to install nginx and dynamically pull the configuration and deployable files from github.
 
 While this could have been a "correct" solution, it suffers from a number of issues. It's not every extensible, it only provisions one server, and doesn't particularly leverage the capabilities of the provided platform, and it offloads configuration management from the configuration management software to another tool, which isn't great.
 
 On the plus side - it's very readable and fairly concise. It wouldn't be too hard to turn it into something a tad more robust. 
 
-###quirks
+### quirks
 When running `createstack2.sh` on a FreeBSD host, the `nginx-deploy` playbook will fail for up to 60 seconds after the initial deployment goes through. 
 
 TODO: Investigate, potentially needs a bug report filed with the ansible team. 
